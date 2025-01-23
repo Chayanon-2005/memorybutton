@@ -17,6 +17,11 @@ class SequenceGameApp(App):
             button = Button(text=str(num), font_size=20, background_color=(0.2, 0.6, 1, 1))
 
      def on_button_press(self, instance):
+        # ตรวจสอบว่าปุ่มที่กดเป็นลำดับตัวเลขที่ถูกต้องหรือไม่
+        if int(instance.text) == self.current_index:
+            instance.background_color = (0, 1, 0, 1)  # สีเขียวถ้ากดถูก
+            instance.disabled = True  # ปิดการใช้งานปุ่มที่กดไปแล้ว
+            self.current_index += 1  # ไปยังตัวเลขถัดไป
 
 if __name__ == "__main__":
     SequenceGameApp().run()
