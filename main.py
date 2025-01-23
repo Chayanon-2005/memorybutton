@@ -6,3 +6,6 @@ from random import shuffle
 class SequenceGameApp(App):
     def build(self):
         self.root_layout = GridLayout(cols=5, spacing=10, padding=10)   
+
+if __name__ == "__main__":
+    SequenceGameApp().run()
