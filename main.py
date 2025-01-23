@@ -16,5 +16,7 @@ class SequenceGameApp(App):
         for num in self.sequence:
             button = Button(text=str(num), font_size=20, background_color=(0.2, 0.6, 1, 1))
 
+     def on_button_press(self, instance):
+
 if __name__ == "__main__":
     SequenceGameApp().run()
