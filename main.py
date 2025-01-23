@@ -5,7 +5,11 @@ from random import shuffle
 
 class SequenceGameApp(App):
     def build(self):
-        self.root_layout = GridLayout(cols=5, spacing=10, padding=10)   
+        #สร้าง layout
+        self.root_layout = GridLayout(cols=5, spacing=10, padding=10)
+        #สร้าง 30 ปุ่ม
+        self.buttons = []
+        self.sequence = list(range(1, 31))   
 
 if __name__ == "__main__":
     SequenceGameApp().run()
