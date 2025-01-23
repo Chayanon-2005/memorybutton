@@ -1,6 +1,9 @@
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
 from random import shuffle
 
 class SequenceGameApp(App):
@@ -27,6 +30,21 @@ class SequenceGameApp(App):
             instance.background_color = (0, 1, 0, 1)  # สีเขียวถ้ากดถูก
             instance.disabled = True  # ปิดการใช้งานปุ่มที่กดไปแล้ว
             self.current_index += 1  # ไปยังตัวเลขถัดไป
+    
+    def show_game_popup(self):
+        content = BoxLayout(orientation='vertical', spacing=10, padding=10)
+        content.add_widget(Label(text="Game Over! Congratulations!", font_size=20))
+        close_button = Button(text="Close", size_hint=(1, 0.2))
+        content.add_widget(close_button)
+
+        popup = Popup(title="Game Win!",
+                      content=content,
+                      size_hint=(0.6, 0.4),
+                      auto_dismiss=False)
+
+        close_button.bind(on_press=popup.dismiss)
+        popup.open()
+
 
 if __name__ == "__main__":
     SequenceGameApp().run()
