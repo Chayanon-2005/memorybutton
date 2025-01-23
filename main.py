@@ -15,6 +15,7 @@ class SequenceGameApp(App):
 
         for num in self.sequence:
             button = Button(text=str(num), font_size=20, background_color=(0.2, 0.6, 1, 1))
+            button.bind(on_press=self.on_button_press)
 
      def on_button_press(self, instance):
         # ตรวจสอบว่าปุ่มที่กดเป็นลำดับตัวเลขที่ถูกต้องหรือไม่
