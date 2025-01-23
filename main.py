@@ -16,8 +16,12 @@ class SequenceGameApp(App):
         for num in self.sequence:
             button = Button(text=str(num), font_size=20, background_color=(0.2, 0.6, 1, 1))
             button.bind(on_press=self.on_button_press)
+            self.buttons.append(button)
+            self.root_layout.add_widget(button)
 
-     def on_button_press(self, instance):
+        return self.root_layout
+
+    def on_button_press(self, instance):
         # ตรวจสอบว่าปุ่มที่กดเป็นลำดับตัวเลขที่ถูกต้องหรือไม่
         if int(instance.text) == self.current_index:
             instance.background_color = (0, 1, 0, 1)  # สีเขียวถ้ากดถูก
