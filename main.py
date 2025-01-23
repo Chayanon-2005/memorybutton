@@ -13,6 +13,7 @@ class SequenceGameApp(App):
         shuffle(self.sequence)  # สุ่มลำดับของปุ่ม
         self.current_index = 1 #โดยให้เริ่มจาก 1
 
+        for num in self.sequence:
 
 if __name__ == "__main__":
     SequenceGameApp().run()
