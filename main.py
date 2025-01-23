@@ -14,6 +14,7 @@ class SequenceGameApp(App):
         self.current_index = 1 #โดยให้เริ่มจาก 1
 
         for num in self.sequence:
+            button = Button(text=str(num), font_size=20, background_color=(0.2, 0.6, 1, 1))
 
 if __name__ == "__main__":
     SequenceGameApp().run()
