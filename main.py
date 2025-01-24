@@ -48,6 +48,10 @@ class SequenceGameApp(App):
 
             if self.current_index > len(self.sequence):
                 self.end_game()
+        else:
+            # เพิ่มเวลาเมื่อกดผิดปุ่ม
+            self.time_elapsed += 2  # เพิ่มเวลา 2 วินาที
+            instance.background_color = (1, 0, 0, 1)  # เปลี่ยนสีปุ่มเป็นสีแดง
 
     def end_game(self):
         # จบเกมและหยุดจับเวลา
