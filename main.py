@@ -6,16 +6,21 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.image import Image
 from random import shuffle
 
 class StartScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         layout = BoxLayout(orientation='vertical', spacing=20, padding=20)
-        start_label = Label(text="Welcome to the Sequence Game!", font_size=24, size_hint=(1, 0.6))
+
+        # เพิ่มรูปภาพในหน้าจอเริ่มเกม
+        image = Image(source='start_screen.png', size_hint=(1, 0.6))
+        start_label = Label(text="Welcome to the Sequence Game!", font_size=24, size_hint=(1, 0.2))
         start_button = Button(text="Start Game", font_size=20, size_hint=(1, 0.2))
         start_button.bind(on_press=self.start_game)
 
+        layout.add_widget(image)
         layout.add_widget(start_label)
         layout.add_widget(start_button)
         self.add_widget(layout)
