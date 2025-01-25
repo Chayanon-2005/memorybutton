@@ -85,7 +85,11 @@ class GameScreen(Screen):
         # สร้าง Popup แสดงข้อความจบเกม
         content = BoxLayout(orientation='vertical', spacing=10, padding=10)
         content.add_widget(Label(text=f"Game Over! Time: {self.time_elapsed:.1f} seconds", font_size=20))
+
+        restart_button = Button(text="Restart Game", size_hint=(1, 0.2))
         close_button = Button(text="Close", size_hint=(1, 0.2))
+
+        content.add_widget(restart_button)
         content.add_widget(close_button)
 
         popup = Popup(title="Game Over",
@@ -93,8 +97,19 @@ class GameScreen(Screen):
                       size_hint=(0.6, 0.4),
                       auto_dismiss=False)
 
+        restart_button.bind(on_press=self.restart_game)
         close_button.bind(on_press=popup.dismiss)
         popup.open()
+
+    def restart_game(self, instance):
+        # รีเซ็ตสถานะเกมและเริ่มเกมใหม่
+        self.manager.current = "start"
+        self.manager.get_screen("game").reset_game()
+
+    def reset_game(self):
+        # รีเซ็ตเกม
+        self.root_layout.clear_widgets()
+        self.__init__()
 
 class SequenceGameApp(App):
     def build(self):
