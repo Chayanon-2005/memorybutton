@@ -26,6 +26,7 @@ class StartScreen(Screen):
 class GameScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.popup = None  # เก็บ reference ของ Popup เพื่อจัดการ
         self.root_layout = GridLayout(cols=5, spacing=10, padding=10)
 
         # สร้างปุ่ม 30 ปุ่ม
@@ -83,6 +84,9 @@ class GameScreen(Screen):
 
     def show_game_popup(self):
         # สร้าง Popup แสดงข้อความจบเกม
+        if self.popup:  # หากมี Popup เปิดอยู่ ให้ปิดก่อน
+            self.popup.dismiss()
+
         content = BoxLayout(orientation='vertical', spacing=10, padding=10)
         content.add_widget(Label(text=f"Game Over! Time: {self.time_elapsed:.1f} seconds", font_size=20))
 
@@ -92,19 +96,25 @@ class GameScreen(Screen):
         content.add_widget(restart_button)
         content.add_widget(close_button)
 
-        popup = Popup(title="Game Over",
-                      content=content,
-                      size_hint=(0.6, 0.4),
-                      auto_dismiss=False)
+        self.popup = Popup(title="Game Over",
+                           content=content,
+                           size_hint=(0.6, 0.4),
+                           auto_dismiss=False)
 
         restart_button.bind(on_press=self.restart_game)
-        close_button.bind(on_press=popup.dismiss)
-        popup.open()
+        close_button.bind(on_press=self.close_popup)
+        self.popup.open()
 
     def restart_game(self, instance):
         # รีเซ็ตสถานะเกมและเริ่มเกมใหม่
+        if self.popup:
+            self.popup.dismiss()
         self.manager.current = "start"
         self.manager.get_screen("game").reset_game()
+
+    def close_popup(self, instance):
+        if self.popup:
+            self.popup.dismiss()
 
     def reset_game(self):
         # รีเซ็ตเกม
