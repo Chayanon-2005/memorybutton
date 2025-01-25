@@ -5,11 +5,27 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
+from kivy.uix.screenmanager import ScreenManager, Screen
 from random import shuffle
 
-class SequenceGameApp(App):
-    def build(self):
-        # สร้าง Layout หลัก
+class StartScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        layout = BoxLayout(orientation='vertical', spacing=20, padding=20)
+        start_label = Label(text="Welcome to the Sequence Game!", font_size=24, size_hint=(1, 0.6))
+        start_button = Button(text="Start Game", font_size=20, size_hint=(1, 0.2))
+        start_button.bind(on_press=self.start_game)
+
+        layout.add_widget(start_label)
+        layout.add_widget(start_button)
+        self.add_widget(layout)
+
+    def start_game(self, instance):
+        self.manager.current = "game"
+
+class GameScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.root_layout = GridLayout(cols=5, spacing=10, padding=10)
 
         # สร้างปุ่ม 30 ปุ่ม
@@ -32,7 +48,7 @@ class SequenceGameApp(App):
         # เริ่มจับเวลา
         self.timer_event = Clock.schedule_interval(self.update_timer, 0.1)
 
-        return self.root_layout
+        self.add_widget(self.root_layout)
 
     def update_timer(self, dt):
         # อัปเดตเวลาที่ผ่านไป
@@ -79,6 +95,13 @@ class SequenceGameApp(App):
 
         close_button.bind(on_press=popup.dismiss)
         popup.open()
+
+class SequenceGameApp(App):
+    def build(self):
+        sm = ScreenManager()
+        sm.add_widget(StartScreen(name="start"))
+        sm.add_widget(GameScreen(name="game"))
+        return sm
 
 if __name__ == "__main__":
     SequenceGameApp().run()
