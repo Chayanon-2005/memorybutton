@@ -51,7 +51,14 @@ class SequenceGameApp(App):
         else:
             # เพิ่มเวลาเมื่อกดผิดปุ่ม
             self.time_elapsed += 2  # เพิ่มเวลา 2 วินาที
-            instance.background_color = (1, 0, 0, 1)  # เปลี่ยนสีปุ่มเป็นสีแดง
+            self.flash_red(instance)  # ทำให้ปุ่มกระพริบสีแดง
+
+    def flash_red(self, instance):
+        # ทำให้ปุ่มกระพริบสีแดง
+        def restore_color(dt):
+            instance.background_color = (0.2, 0.6, 1, 1)  # คืนสีเดิมหลังจากกระพริบ
+        instance.background_color = (1, 0, 0, 1)  # เปลี่ยนสีปุ่มเป็นสีแดง
+        Clock.schedule_once(restore_color, 0.5)  # เปลี่ยนกลับหลัง 0.5 วินาที
 
     def end_game(self):
         # จบเกมและหยุดจับเวลา
