@@ -8,6 +8,7 @@ from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.image import Image
 from random import shuffle
+import sys
 
 class StartScreen(Screen):
     def __init__(self, **kwargs):
@@ -107,7 +108,7 @@ class GameScreen(Screen):
                            auto_dismiss=False)
 
         restart_button.bind(on_press=self.restart_game)
-        close_button.bind(on_press=self.close_popup)
+        close_button.bind(on_press=self.close_application)
         self.popup.open()
 
     def restart_game(self, instance):
@@ -117,9 +118,12 @@ class GameScreen(Screen):
         self.manager.current = "start"
         self.manager.get_screen("game").reset_game()
 
-    def close_popup(self, instance):
+    def close_application(self, instance):
+        # ปิดโปรแกรม
         if self.popup:
             self.popup.dismiss()
+        App.get_running_app().stop()
+        sys.exit()
 
     def reset_game(self):
         # รีเซ็ตเกม
