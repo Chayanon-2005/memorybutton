@@ -33,6 +33,7 @@ class GameScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.popup = None  # เก็บ reference ของ Popup เพื่อจัดการ
+        self.is_paused = False
         self.root_layout = GridLayout(cols=5, spacing=10, padding=10)
 
         # สร้างปุ่ม 30 ปุ่ม
@@ -52,17 +53,63 @@ class GameScreen(Screen):
         self.timer_label = Label(text="Time: 0.0 seconds", font_size=20, size_hint=(1, 0.1))
         self.root_layout.add_widget(self.timer_label)
 
+        # ปุ่ม Pause
+        self.pause_button = Button(text="Pause", size_hint=(1, 0.1), pos_hint={'right': 1, 'top': 1})
+        self.pause_button.bind(on_press=self.toggle_pause)
+        self.root_layout.add_widget(self.pause_button)
+
         # เริ่มจับเวลา
         self.timer_event = Clock.schedule_interval(self.update_timer, 0.1)
 
         self.add_widget(self.root_layout)
 
     def update_timer(self, dt):
-        # อัปเดตเวลาที่ผ่านไป
-        self.time_elapsed += dt
-        self.timer_label.text = f"Time: {self.time_elapsed:.1f} seconds"
+        if not self.is_paused:
+            # อัปเดตเวลาที่ผ่านไป
+            self.time_elapsed += dt
+            self.timer_label.text = f"Time: {self.time_elapsed:.1f} seconds"
+
+    def toggle_pause(self, instance):
+        self.is_paused = not self.is_paused
+        self.pause_button.text = "Resume" if self.is_paused else "Pause"
+        if self.is_paused:
+            self.show_pause_popup()
+
+    def show_pause_popup(self):
+        if self.popup:  # หากมี Popup เปิดอยู่ ให้ปิดก่อน
+            self.popup.dismiss()
+
+        content = BoxLayout(orientation='vertical', spacing=10, padding=10)
+        resume_button = Button(text="Resume", size_hint=(1, 0.2))
+        main_menu_button = Button(text="Main Menu", size_hint=(1, 0.2))
+
+        content.add_widget(resume_button)
+        content.add_widget(main_menu_button)
+
+        self.popup = Popup(title="Paused",
+                           content=content,
+                           size_hint=(0.6, 0.4),
+                           auto_dismiss=False)
+
+        resume_button.bind(on_press=self.resume_game)
+        main_menu_button.bind(on_press=self.back_to_main_menu)
+        self.popup.open()
+
+    def resume_game(self, instance):
+        if self.popup:
+            self.popup.dismiss()
+        self.is_paused = False
+        self.pause_button.text = "Pause"
+
+    def back_to_main_menu(self, instance):
+        if self.popup:
+            self.popup.dismiss()
+        self.manager.current = "start"
 
     def on_button_press(self, instance):
+        if self.is_paused:
+            return
+
         # ตรวจสอบว่าปุ่มที่กดเป็นลำดับตัวเลขที่ถูกต้องหรือไม่
         if int(instance.text) == self.current_index:
             instance.background_color = (0, 1, 0, 1)  # สีเขียวถ้ากดถูก
